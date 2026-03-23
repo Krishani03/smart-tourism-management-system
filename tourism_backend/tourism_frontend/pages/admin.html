@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Smart Tourism</title>
+    <link rel="stylesheet" href="../css/admin.css">
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background-color: #f0f2f5; margin: 0; padding: 20px; }
+        .admin-nav { display: flex; justify-content: space-between; align-items: center; background: #343a40; color: white; padding: 15px 30px; border-radius: 8px; margin-bottom: 20px; }
+        .container { display: flex; gap: 20px; flex-wrap: wrap; }
+        .card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); flex: 1; min-width: 350px; }
+        h2 { margin-top: 0; color: #333; }
+        label { display: block; margin-top: 10px; font-weight: bold; color: #555; }
+        input, textarea { width: 100%; padding: 12px; margin-top: 5px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; font-size: 14px; }
+        textarea { height: 100px; resize: vertical; }
+        .btn-save { width: 100%; background-color: #007bff; color: white; border: none; padding: 12px; margin-top: 20px; border-radius: 6px; cursor: pointer; font-size: 16px; font-weight: bold; transition: 0.3s; }
+        .btn-save:hover { background-color: #0056b3; }
+        .btn-logout { background-color: #dc3545; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+<div class="admin-nav">
+    <span><strong>Admin Panel:</strong> Manage Tour Packages</span>
+    <button class="btn-logout" onclick="logout()">Logout</button>
+</div>
+
+<div class="container">
+    <div class="card">
+        <h2>Create New Package</h2>
+        <p style="font-size: 13px; color: #666;">Adding a package here will trigger the <b>Dynamic Pricing Engine</b> once bookings begin.</p>
+
+        <label for="tour-title">Package Name</label>
+        <input type="text" id="tour-title" placeholder="e.g. Tropical Beach Escape">
+
+        <label for="tour-desc">Description</label>
+        <textarea id="tour-desc" placeholder="Details about the destination, activities, etc."></textarea>
+
+        <label for="tour-price">Base Price (LKR)</label>
+        <input type="number" id="tour-price" placeholder="15000">
+
+        <label for="tour-capacity">Max Capacity (Seats)</label>
+        <input type="number" id="tour-capacity" placeholder="20">
+
+        <button class="btn-save" onclick="addNewTour()">🚀 Publish Package</button>
+    </div>
+
+    <div class="card" style="flex: 0.5;">
+        <h2>Quick Insights</h2>
+        <ul style="line-height: 2;">
+            <li><strong>Pricing Logic:</strong> Active (Demand-based)</li>
+            <li><strong>Refund Policy:</strong> 24h Strict</li>
+            <li><strong>Database Status:</strong> Connected</li>
+        </ul>
+        <p>Once you add a tour, you can view it on the <a href="dashboard.html">Main Dashboard</a> to test the booking flow.</p>
+    </div>
+</div>
+
+<script src="../js/app.js"></script>
+</body>
+</html>

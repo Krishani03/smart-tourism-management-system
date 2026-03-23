@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Smart Tourism - Register</title>
+  <link rel="stylesheet" href="../css/register.css">
+
+</head>
+<body>
+<div class="register-container">
+  <h2>Create Account</h2>
+  <input type="text" id="reg-username" placeholder="Username (Email)">
+  <input type="password" id="reg-password" placeholder="Password">
+
+  <label for="reg-role">I am a:</label>
+  <select id="reg-role">
+    <option value="TOURIST">Tourist</option>
+    <option value="ADMIN">Administrator</option>
+    <option value="GUIDE">Tour Guide</option>
+  </select>
+
+  <button onclick="submitRegistration()">Sign Up</button>
+  <div class="footer-link">
+    Already have an account? <a href="login.html">Login here</a>
+  </div>
+  <p id="reg-msg" style="text-align: center; color: red;"></p>
+</div>
+
+<script src="../js/app.js"></script>
+</body>
+</html>

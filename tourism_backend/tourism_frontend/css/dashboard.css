@@ -1,0 +1,41 @@
+body { font-family: 'Segoe UI', sans-serif; background: #f8f9fa; padding: 20px; }
+
+h2 { text-align: center; color: #2c3e50; margin-bottom: 30px; }
+
+.tour-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 25px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    transition: transform 0.3s ease;
+    border: 1px solid #eee;
+}
+
+.card:hover { transform: translateY(-5px); }
+
+.card h3 { margin-top: 0; color: #007bff; }
+
+.price {
+    color: #27ae60;
+    font-weight: bold;
+    font-size: 1.4em;
+    margin: 15px 0;
+}
+
+button {
+    width: 100%;
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 6px;
+    cursor: pointer;
+}
