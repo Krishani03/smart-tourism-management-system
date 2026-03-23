@@ -20,7 +20,7 @@ public class TourPackage {
     @Column(length = 1000)
     private String description;
 
-    private BigDecimal basePrice; // The original price
+    private BigDecimal basePrice; // original price
     private BigDecimal currentPrice; // Price after Dynamic Pricing logic
 
     private Integer maxCapacity;

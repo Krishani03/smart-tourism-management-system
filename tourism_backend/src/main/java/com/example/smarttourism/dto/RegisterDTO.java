@@ -10,5 +10,5 @@ import lombok.NoArgsConstructor;
 public class RegisterDTO {
     private String username;
     private String password;
-    private String role; // Sent as "ADMIN" or "TOURIST"
+    private String role;
 }

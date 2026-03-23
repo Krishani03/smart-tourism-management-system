@@ -23,7 +23,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     private final JwtAuthFilter jwtAuthFilter;
-    private final UserDetailsService userDetailsService; // The Spring Interface
+    private final UserDetailsService userDetailsService;
     private final PasswordEncoder passwordEncoder;
 
     @Bean
@@ -34,7 +34,6 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/v1/auth/**").permitAll()
 
-                        // Allow everyone to VIEW tours, but only ADMIN to CREATE them
                         .requestMatchers(HttpMethod.GET, "/api/v1/tours/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/v1/tours/**").hasRole("ADMIN")
                         .requestMatchers("/api/v1/bookings/**").hasAnyRole("CUSTOMER", "ADMIN", "TOURIST")
@@ -44,7 +43,7 @@ public class SecurityConfig {
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
-                // WE MANUALLY SET THE PROVIDER HERE TO FIX THE ERROR
+
                 .authenticationProvider(daoAuthenticationProvider())
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
@@ -52,12 +51,10 @@ public class SecurityConfig {
         return http.build();
     }
 
-    // Defining it locally often solves the "Cannot resolve method" issue
+
     private AuthenticationProvider daoAuthenticationProvider() {
-        // Pass the userDetailsService directly into the constructor here
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider(userDetailsService);
 
-        // Then set the password encoder separately
         authProvider.setPasswordEncoder(passwordEncoder);
 
         return authProvider;

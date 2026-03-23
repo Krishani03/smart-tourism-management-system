@@ -22,8 +22,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<AuthResponseDTO> authenticate(@RequestBody AuthDTO authDTO) {
-        // This calls the 'authenticate' method in your AuthService
-        // which uses AuthenticationManager to verify the user.
+
         return ResponseEntity.ok(authService.authenticate(authDTO));
     }
 }

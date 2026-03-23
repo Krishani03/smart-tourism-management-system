@@ -15,13 +15,11 @@ public class TourPackageController {
 
     private final TourPackageService tourPackageService;
 
-    // PUBLIC: Anyone can see the available tours
     @GetMapping
     public ResponseEntity<List<TourPackage>> getAllTours() {
         return ResponseEntity.ok(tourPackageService.findAll());
     }
 
-    // ADMIN ONLY: Only admins can create new packages
     @PostMapping
     public ResponseEntity<TourPackage> createPackage(@RequestBody TourPackage tourPackage) {
         return ResponseEntity.ok(tourPackageService.save(tourPackage));
