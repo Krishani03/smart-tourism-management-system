@@ -67,3 +67,90 @@ button:hover {
     background:#40E0D0;
     transform: scale(1.05);
 }
+
+/* 1. The Road System */
+.road-system {
+    position: absolute;
+    bottom: 10%;
+    width: 100%;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.1);
+    z-index: 5;
+}
+
+/* 2. The Car Container */
+.car {
+    position: absolute;
+    width: 80px;
+    height: 35px;
+    bottom: 2px;
+    animation: driveAcross 15s linear infinite; /* Adjust time for speed */
+}
+
+/* 3. The Van Body */
+.van-body {
+    width: 100%;
+    height: 22px;
+    background: #32CD32; /* Electric Cyan */
+    border-radius: 4px 12px 2px 2px;
+    position: relative;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+/* Windows */
+.van-body::after {
+    content: '';
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 22px;
+    height: 9px;
+    background: #ffffff;
+    border-radius: 2px 7px 0 0;
+    opacity: 0.8;
+}
+
+.van-body::before {
+    content: '';
+    position: absolute;
+    top: 4px;
+    left: 8px;
+    width: 28px;
+    height: 9px;
+    background: #ffffff;
+    border-radius: 2px;
+    opacity: 0.8;
+}
+
+/* Wheels */
+.wheel {
+    position: absolute;
+    bottom: -5px;
+    width: 12px;
+    height: 12px;
+    background: #222;
+    border-radius: 50%;
+    border: 2px dashed #666; /* Creates the spinning effect */
+    animation: spinWheel 0.8s linear infinite;
+}
+
+.front { right: 10px; }
+.back { left: 10px; }
+
+/* Animation Keyframes */
+@keyframes driveAcross {
+    from { left: -100px; }
+    to { left: 100%; }
+}
+
+@keyframes spinWheel {
+    100% { transform: rotate(360deg); }
+}
+
+/* Interactive: Pause the car if the mouse hovers over the road area */
+.road-system:hover .car {
+    animation-play-state: paused;
+}
+.road-system:hover .wheel {
+    animation-play-state: paused;
+}

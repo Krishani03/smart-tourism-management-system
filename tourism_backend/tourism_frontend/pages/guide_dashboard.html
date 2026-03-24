@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Guide Dashboard - Smart Tourism</title>
+    <link rel="stylesheet" href="../css/guide.css">
+</head>
+<body>
+
+<div class="guide-header">
+    <div>
+        <h1>Guide Control Center 🧭</h1>
+        <p>Welcome, <span id="guide-name">Guide</span></p>
+    </div>
+    <button class="btn-logout" onclick="logout()" style="height: 40px; margin-top: 20px;">Logout</button>
+</div>
+
+<div class="container">
+    <h2>My Assigned Tours</h2>
+    <div id="guide-tours-container">
+        <p>Loading your assignments...</p>
+    </div>
+</div>
+
+<script src="../js/guide_dashboard.js"></script>
+<script>
+    window.onload = async () => {
+        const username = localStorage.getItem('username');
+        const token = localStorage.getItem('token');
+        document.getElementById('guide-name').innerText = username;
+
+        try {
+            const response = await fetch(`http://localhost:8080/api/v1/bookings/guide/${username}`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            const bookings = await response.json();
+
+            const container = document.getElementById('guide-tours-container');
+            if(bookings.length === 0) {
+                container.innerHTML = "<div class='assignment-card'>No tours assigned yet.</div>";
+                return;
+            }
+
+            container.innerHTML = "";
+            bookings.forEach(booking => {
+                container.innerHTML += `
+        <div class="assignment-card">
+            <h3>Tour: ${booking.tourPackage.title}</h3>
+            <p><strong>📍 Start Point:</strong> ${booking.tourPackage.startDestination || 'Not Set'}</p>
+            <p><strong>👤 Customer:</strong> ${booking.user.username}</p>
+            <p><strong>👥 Group Size:</strong> ${booking.numberOfPeople} People</p>
+            <div class="passenger-list">
+                <strong>Booking Date:</strong> ${new Date(booking.bookingDate).toLocaleDateString()}
+            </div>
+        </div>
+    `;
+            });
+        } catch (err) {
+            console.error("Failed to load guide data", err);
+        }
+    };
+</script>
+</body>
+</html>
