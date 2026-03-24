@@ -21,7 +21,7 @@ public class TourPackage {
     private String description;
 
     private BigDecimal basePrice; // original price
-    private BigDecimal currentPrice; // Price after Dynamic Pricing logic
+    private BigDecimal currentPrice; // after dynamic pricing
 
     private Integer maxCapacity;
     private Integer currentBookings = 0;
