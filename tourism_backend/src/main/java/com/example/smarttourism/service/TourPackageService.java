@@ -9,4 +9,5 @@ public interface TourPackageService {
     TourPackage getTourById(Long id);
     TourPackage updateTour(Long id, TourPackage details);
     void deleteTour(Long id);
+    List<TourPackage> getToursByGuide(String username);
 }

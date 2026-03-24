@@ -1,6 +1,6 @@
 const BASE_URL = "http://localhost:8080/api/v1";
 
-// 1. REGISTER LOGIC
+
 async function submitRegistration() {
     const username = document.getElementById('reg-username').value;
     const password = document.getElementById('reg-password').value;
@@ -27,7 +27,6 @@ async function submitRegistration() {
     }
 }
 
-
 async function handleLogin() {
     const userVal = document.getElementById('username').value;
     const passVal = document.getElementById('password').value;
@@ -42,16 +41,17 @@ async function handleLogin() {
         if (response.ok) {
             const data = await response.json();
 
-            // SAVE THE KEY CARD (JWT Token)
+            // Save credentials
             localStorage.setItem('token', data.token);
             localStorage.setItem('username', userVal);
 
             alert("Login Successful!");
 
-            // --- SMART REDIRECT ---
-            // Check if the username contains "admin" (case insensitive)
-            if (userVal.toLowerCase().includes("admin")) {
+            const userLower = userVal.toLowerCase();
+            if (userLower.includes("admin")) {
                 window.location.href = "admin.html";
+            } else if (userLower.includes("guide")) {
+                window.location.href = "guide_dashboard.html";
             } else {
                 window.location.href = "dashboard.html";
             }
@@ -63,16 +63,17 @@ async function handleLogin() {
         console.error("Login Error:", error);
         alert("Server is down. Make sure Spring Boot is running on port 8080!");
     }
+
 }
 
-// 3. ADMIN: ADD NEW TOUR LOGIC (Use this in admin.html)
 async function addNewTour() {
     const token = localStorage.getItem('token');
 
-    // Ensure all these IDs exist in your admin.html form
     const tourData = {
         title: document.getElementById('tour-title').value,
+        startDestination: document.getElementById('tour-start').value,
         description: document.getElementById('tour-desc').value,
+        guideUsername: document.getElementById('tour-guide').value,
         basePrice: document.getElementById('tour-price').value,
         maxCapacity: document.getElementById('tour-capacity').value
     };
@@ -82,14 +83,14 @@ async function addNewTour() {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}` // Send the JWT for security
+                'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify(tourData)
         });
 
         if (response.ok) {
             alert("Tour Package Created Successfully!");
-            window.location.href = "dashboard.html"; // Go see the result
+            window.location.href = "dashboard.html";
         } else if (response.status === 403) {
             alert("Access Denied: You do not have Admin permissions!");
         } else {
@@ -100,8 +101,8 @@ async function addNewTour() {
     }
 }
 
-// 4. LOGOUT LOGIC
+
 function logout() {
-    localStorage.clear(); // Clear token and username
+    localStorage.clear();
     window.location.href = "login.html";
 }

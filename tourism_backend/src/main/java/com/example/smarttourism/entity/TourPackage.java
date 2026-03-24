@@ -27,4 +27,10 @@ public class TourPackage {
     private Integer currentBookings = 0;
 
     private Double popularityScore = 0.0;
+
+    private String startDestination;
+
+    @ManyToOne
+    @JoinColumn(name = "guide_id")
+    private User assignedGuide;
 }

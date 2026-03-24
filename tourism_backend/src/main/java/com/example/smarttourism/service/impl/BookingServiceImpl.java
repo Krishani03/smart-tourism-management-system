@@ -11,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -37,5 +39,14 @@ public class BookingServiceImpl implements BookingService {
                 .build();
 
         return bookingRepository.save(booking);
+    }
+
+    @Override
+    public List<Booking> getBookingsByGuide(String guideUsername) {
+        return bookingRepository.findAll()
+                .stream()
+                .filter(b -> b.getTourPackage().getAssignedGuide() != null &&
+                        b.getTourPackage().getAssignedGuide().getUsername().equals(guideUsername))
+                .collect(Collectors.toList());
     }
 }

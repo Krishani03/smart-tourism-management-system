@@ -21,7 +21,12 @@ public class TourPackageController {
     }
 
     @PostMapping
-    public ResponseEntity<TourPackage> createPackage(@RequestBody TourPackage tourPackage) {
+    public ResponseEntity<TourPackage> createPackage(@RequestBody TourPackage tourPackage, @RequestParam(required = false) String guideUsername) {
         return ResponseEntity.ok(tourPackageService.save(tourPackage));
+    }
+
+    @GetMapping("/guide/{username}")
+    public ResponseEntity<List<TourPackage>> getGuideTours(@PathVariable String username) {
+        return ResponseEntity.ok(tourPackageService.getToursByGuide(username));
     }
 }
