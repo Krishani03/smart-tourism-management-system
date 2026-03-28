@@ -50,7 +50,7 @@ public class TourPackageServiceImpl implements TourPackageService {
         tourPackageRepository.deleteById(id);
     }
     @Override
-    public List<TourPackage> getToursByGuide(String username) {
-        return tourPackageRepository.findByAssignedGuideUsername(username);
+    public List<TourPackage> getToursByGuide(String name) {
+        return tourPackageRepository.findByCategoryName(name);
     }
 }
