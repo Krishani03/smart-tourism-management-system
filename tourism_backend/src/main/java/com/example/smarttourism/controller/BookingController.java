@@ -1,14 +1,13 @@
 package com.example.smarttourism.controller;
 
-
+import com.example.smarttourism.dto.BookingRequestDTO;
 import com.example.smarttourism.entity.Booking;
 import com.example.smarttourism.service.BookingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/bookings")
@@ -18,15 +17,23 @@ public class BookingController {
     private final BookingService bookingService;
 
     @PostMapping
-    public ResponseEntity<Booking> createBooking(
-            @RequestBody Map<String, Object> payload,
-            Authentication authentication
-    ) {
-        Long tourId = Long.valueOf(payload.get("tourId").toString());
-        Integer people = Integer.valueOf(payload.get("people").toString());
+    public ResponseEntity<Booking> createBooking(@RequestBody BookingRequestDTO dto) {
+        return ResponseEntity.ok(bookingService.createBooking(dto));
+    }
 
-        String username = authentication.getName();
+    @GetMapping("/user/{username}")
+    public ResponseEntity<List<Booking>> getMyBookings(@PathVariable String username) {
+        return ResponseEntity.ok(bookingService.getMyBookings(username));
+    }
 
-        return ResponseEntity.ok(bookingService.createBooking(tourId, username, people));
+
+    @PutMapping("/{id}/cancel")
+    public ResponseEntity<String> cancelBooking(@PathVariable Long id) {
+        bookingService.cancelBooking(id);
+        return ResponseEntity.ok("Booking status updated based on 24h policy.");
+    }
+    @GetMapping("/tour/{tourId}")
+    public ResponseEntity<List<Booking>> getBookingsByTour(@PathVariable Long tourId) {
+        return ResponseEntity.ok(bookingService.getBookingsByTour(tourId));
     }
 }

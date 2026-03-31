@@ -1,6 +1,10 @@
 package com.example.smarttourism.service.impl;
 
+import com.example.smarttourism.dto.TourRequestDTO;
 import com.example.smarttourism.entity.TourPackage;
+import com.example.smarttourism.entity.User;
+import com.example.smarttourism.repository.CategoryRepository; // Add this
+import com.example.smarttourism.repository.LocationRepository; // Add this
 import com.example.smarttourism.repository.TourPackageRepository;
 import com.example.smarttourism.repository.UserRepository;
 import com.example.smarttourism.service.TourPackageService;
@@ -12,16 +16,39 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class TourPackageServiceImpl implements TourPackageService {
+
     private final TourPackageRepository tourPackageRepository;
     private final UserRepository userRepository;
+    private final CategoryRepository categoryRepository; // NEW
+    private final LocationRepository locationRepository; // NEW
 
     @Override
-    public TourPackage save(TourPackage tourPackage) {
-        if (tourPackage.getCurrentPrice() == null) {
-            tourPackage.setCurrentPrice(tourPackage.getBasePrice());
+    public TourPackage save(TourRequestDTO dto) {
+        TourPackage tour = new TourPackage();
+
+        tour.setTitle(dto.getTitle());
+        tour.setDescription(dto.getDescription());
+        tour.setBasePrice(dto.getBasePrice());
+        tour.setCurrentPrice(dto.getBasePrice()); // Initial price = base price
+        tour.setMaxCapacity(dto.getMaxCapacity());
+
+        if (dto.getCategoryId() != null) {
+            tour.setCategory(categoryRepository.findById(dto.getCategoryId())
+                    .orElseThrow(() -> new RuntimeException("Category not found")));
         }
 
-        return tourPackageRepository.save(tourPackage);
+        if (dto.getLocationId() != null) {
+            tour.setLocation(locationRepository.findById(dto.getLocationId())
+                    .orElseThrow(() -> new RuntimeException("Location not found")));
+        }
+
+        if (dto.getGuideUsername() != null) {
+            User guide = userRepository.findByUsername(dto.getGuideUsername())
+                    .orElseThrow(() -> new RuntimeException("Guide user not found"));
+            tour.setAssignedGuide(guide);
+        }
+
+        return tourPackageRepository.save(tour);
     }
 
     @Override
@@ -42,6 +69,7 @@ public class TourPackageServiceImpl implements TourPackageService {
         existingTour.setDescription(details.getDescription());
         existingTour.setBasePrice(details.getBasePrice());
         existingTour.setMaxCapacity(details.getMaxCapacity());
+
         return tourPackageRepository.save(existingTour);
     }
 
@@ -49,8 +77,9 @@ public class TourPackageServiceImpl implements TourPackageService {
     public void deleteTour(Long id) {
         tourPackageRepository.deleteById(id);
     }
+
     @Override
-    public List<TourPackage> getToursByGuide(String name) {
-        return tourPackageRepository.findByCategoryName(name);
+    public List<TourPackage> getToursByGuide(String username) {
+        return tourPackageRepository.findByAssignedGuideUsername(username);
     }
 }

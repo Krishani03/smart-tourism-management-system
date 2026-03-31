@@ -1,156 +1,137 @@
-body {
-    margin: 0;
-    font-family: 'Segoe UI', sans-serif;
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&display=swap');
 
-    background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5));
-    background-image: url("../img/background_tourism.png");
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
-    height: 100vh;
-    color: white;
+:root {
+    --accent: #ffc107;
+    --white: #ffffff;
+    --glass: rgba(255, 255, 255, 0.15);
 }
 
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
+    url("../img/background_register.png") no-repeat center center fixed;
+    background-size: cover;
+    height: 100vh;
+    color: var(--white);
+    overflow: hidden;
+}
+
+/* 🧭 Glassmorphism Nav */
 nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px 50px;
-    background: rgba(0, 0, 0, 0.3);
+    padding: 20px 8%;
+    background: var(--glass);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255,255,255,0.1);
 }
 
-nav a {
-    color: white;
+nav h1 { font-size: 1.5rem; margin: 0; letter-spacing: 1px; }
+
+nav div a {
+    color: var(--white);
     text-decoration: none;
     margin-left: 20px;
-    font-weight: bold;
-    transition: color 0.3s ease;
+    font-weight: 500;
+    transition: 0.3s;
 }
 
-nav a:hover {
-    color:yellow;
-}
+nav div a:hover { color: var(--accent); }
 
+/* 🏔️ Hero Section with Floating Animation */
 section {
+    height: 70vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     text-align: center;
-    margin-top: 13vh;
+    animation: fadeInUp 1.2s ease-out;
 }
 
-h2 {
+section h2 {
     font-size: 3.5rem;
     margin-bottom: 10px;
-    text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
-}
-p{
-    color:white ;
-    font-size: 1.2rem;
-    font-weight: 500;
-    text-shadow: 10px 10px 10px black;
-    letter-spacing: 0.5px;
+    text-shadow: 2px 4px 10px rgba(0,0,0,0.3);
 }
 
-button {
-    background:#32CD32;
-    color: white;
-    padding: 15px 40px;
-    border: none;
-    border-radius: 30px;
+section p {
     font-size: 1.2rem;
+    margin-bottom: 30px;
+    opacity: 0.9;
+}
+
+/* 🔘 Modern Ripple Button */
+button {
+    padding: 15px 40px;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #000;
+    background: var(--accent);
+    border: none;
+    border-radius: 50px;
     cursor: pointer;
-    margin-top: 20px;
-    font-weight: bold;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-    transition: transform 0.2s, background 0.2s;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 20px rgba(255, 193, 7, 0.3);
 }
 
 button:hover {
-    background:#40E0D0;
-    transform: scale(1.05);
+    transform: scale(1.05) translateY(-3px);
+    box-shadow: 0 15px 30px rgba(255, 193, 7, 0.5);
 }
 
-/* 1. The Road System */
+/* 🚐 The Animated Van (Improved) */
 .road-system {
     position: absolute;
-    bottom: 10%;
+    bottom: 0;
     width: 100%;
-    height: 2px;
-    background: rgba(255, 255, 255, 0.1);
-    z-index: 5;
+    height: 100px;
+    background: rgba(0,0,0,0.2);
+    border-top: 4px solid rgba(255,255,255,0.1);
 }
 
-/* 2. The Car Container */
 .car {
     position: absolute;
-    width: 80px;
-    height: 35px;
-    bottom: 2px;
-    animation: driveAcross 15s linear infinite; /* Adjust time for speed */
+    bottom: 20px;
+    width: 100px;
+    animation: driveAcross 12s linear infinite;
 }
 
-/* 3. The Van Body */
 .van-body {
     width: 100%;
-    height: 22px;
-    background: #32CD32; /* Electric Cyan */
-    border-radius: 4px 12px 2px 2px;
+    height: 35px;
+    background: #32CD32;
+    border-radius: 8px 15px 5px 5px;
     position: relative;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
 }
 
-/* Windows */
-.van-body::after {
-    content: '';
-    position: absolute;
-    top: 4px;
-    right: 4px;
-    width: 22px;
-    height: 9px;
-    background: #ffffff;
-    border-radius: 2px 7px 0 0;
-    opacity: 0.8;
-}
-
-.van-body::before {
-    content: '';
-    position: absolute;
-    top: 4px;
-    left: 8px;
-    width: 28px;
-    height: 9px;
-    background: #ffffff;
-    border-radius: 2px;
-    opacity: 0.8;
-}
-
-/* Wheels */
 .wheel {
     position: absolute;
-    bottom: -5px;
-    width: 12px;
-    height: 12px;
+    bottom: -8px;
+    width: 18px;
+    height: 18px;
     background: #222;
     border-radius: 50%;
-    border: 2px dashed #666; /* Creates the spinning effect */
-    animation: spinWheel 0.8s linear infinite;
+    border: 3px dashed #fff;
+    animation: spin 1s linear infinite;
 }
 
-.front { right: 10px; }
-.back { left: 10px; }
+.front { right: 15px; }
+.back { left: 15px; }
 
-/* Animation Keyframes */
+/* 💫 Keyframes */
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
 @keyframes driveAcross {
-    from { left: -100px; }
+    from { left: -150px; }
     to { left: 100%; }
 }
 
-@keyframes spinWheel {
+@keyframes spin {
     100% { transform: rotate(360deg); }
-}
-
-/* Interactive: Pause the car if the mouse hovers over the road area */
-.road-system:hover .car {
-    animation-play-state: paused;
-}
-.road-system:hover .wheel {
-    animation-play-state: paused;
 }

@@ -1,44 +1,50 @@
 body { font-family: 'Segoe UI', sans-serif; background-color: #f0f2f5; margin: 0; padding: 20px; }
-
 .admin-nav {
+    background: #212529;
+    color: white;
+    padding: 15px 40px;
     display: flex;
     justify-content: space-between;
-    background: #343a40;
-    color: white;
-    padding: 15px 25px;
-    border-radius: 10px;
-    margin-bottom: 25px;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
 }
 
-.container { display: flex; gap: 20px; }
+.container {
+    padding: 30px;
+    display: flex;
+    gap: 30px;
+}
 
 .card {
     background: white;
-    padding: 25px;
-    border-radius: 12px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    flex: 1;
-}
-
-label { display: block; margin-top: 10px; font-weight: 600; }
-
-input, textarea {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    margin-top: 5px;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
 
 .btn-save {
-    background-color: #007bff;
+    background: #007bff;
     color: white;
     border: none;
-    margin-top: 20px;
-    padding: 15px;
-    border-radius: 6px;
-    font-size: 16px;
+    padding: 12px;
+    border-radius: 8px;
+    font-weight: bold;
     cursor: pointer;
 }
 
-.btn-logout { background: #dc3545; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; }
+/* Passenger Table specific */
+.admin-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 10px;
+}
+
+.admin-table tr {
+    background: #fff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.admin-table td { padding: 15px; border-top: 1px solid #f0f0f0; }
+

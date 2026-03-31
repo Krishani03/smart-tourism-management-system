@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -28,7 +29,7 @@ public class Booking {
     private TourPackage tourPackage;
 
     private Integer numberOfPeople;
-    private Double totalAmount;
+    private BigDecimal totalAmount;
     private String status; // PENDING, CONFIRMED, CANCELLED
 
     private LocalDateTime bookingDate;

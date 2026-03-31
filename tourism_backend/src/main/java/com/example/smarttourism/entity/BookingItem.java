@@ -13,7 +13,7 @@ public class BookingItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String type; // e.g., "Standard", "VIP"
+    private String type;
     private Double price;
 
     @ManyToOne

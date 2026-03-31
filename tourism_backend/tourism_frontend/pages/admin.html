@@ -28,17 +28,20 @@
 
 <div class="container">
     <div class="card">
-        <h2>Create New Package</h2>
-        <p style="font-size: 13px; color: #666;">Adding a package here will trigger the <b>Dynamic Pricing Engine</b> once bookings begin.</p>
+        <h2>Create New Smart Package</h2>
+        <p style="font-size: 13px; color: #666;">Linking to <b>Category</b> and <b>Location</b> entities is required for the Suggestion Engine.</p>
 
         <label for="tour-title">Package Name</label>
         <input type="text" id="tour-title" placeholder="e.g. Tropical Beach Escape">
 
-        <label for="tour-start">Start Destination</label>
-        <input type="text" id="tour-start" placeholder="e.g. Colombo Fort Station">
-
         <label for="tour-desc">Description</label>
         <textarea id="tour-desc" placeholder="Details..."></textarea>
+
+        <label for="tour-category">Category ID</label>
+        <input type="number" id="tour-category" placeholder="e.g. 1 (Adventure), 2 (Beach)">
+
+        <label for="tour-location">Location ID</label>
+        <input type="number" id="tour-location" placeholder="e.g. 1 (Ella), 2 (Kandy)">
 
         <label for="tour-guide">Assign Guide (Username)</label>
         <input type="text" id="tour-guide" placeholder="Enter guide's username">
@@ -50,7 +53,6 @@
         <input type="number" id="tour-capacity" placeholder="20">
 
         <button class="btn-save" onclick="addNewTour()">🚀 Publish Package</button>
-
     </div>
 
     <div class="card" style="flex: 0.5;">

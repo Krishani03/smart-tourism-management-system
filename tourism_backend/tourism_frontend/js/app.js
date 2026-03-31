@@ -1,5 +1,6 @@
 const BASE_URL = "http://localhost:8080/api/v1";
 
+// --- AUTHENTICATION ---
 
 async function submitRegistration() {
     const username = document.getElementById('reg-username').value;
@@ -15,15 +16,13 @@ async function submitRegistration() {
         });
 
         if (response.ok) {
-            alert("Registration Successful! Please Login.");
+            alert("Registration Successful!");
             window.location.href = "login.html";
         } else {
-            const errorText = await response.text();
-            msg.innerText = "Error: " + errorText;
+            msg.innerText = "Error: Registration failed.";
         }
     } catch (error) {
-        msg.innerText = "Cannot connect to Backend Server!";
-        console.error(error);
+        msg.innerText = "Backend Server Offline!";
     }
 }
 
@@ -41,41 +40,37 @@ async function handleLogin() {
         if (response.ok) {
             const data = await response.json();
 
-            // Save credentials
+            // CRITICAL: Save both token and username for Smart Features
             localStorage.setItem('token', data.token);
             localStorage.setItem('username', userVal);
 
-            alert("Login Successful!");
-
-            const userLower = userVal.toLowerCase();
-            if (userLower.includes("admin")) {
-                window.location.href = "admin.html";
-            } else if (userLower.includes("guide")) {
-                window.location.href = "guide_dashboard.html";
-            } else {
-                window.location.href = "dashboard.html";
-            }
+            const role = passVal.toLowerCase(); // Temporary role check or get from data.role
+            if (userVal.includes("admin")) window.location.href = "admin.html";
+            else if (userVal.includes("guide")) window.location.href = "guide_dashboard.html";
+            else window.location.href = "dashboard.html";
 
         } else {
-            alert("Invalid Username or Password!");
+            alert("Invalid Credentials!");
         }
     } catch (error) {
-        console.error("Login Error:", error);
-        alert("Server is down. Make sure Spring Boot is running on port 8080!");
+        alert("Server Error!");
     }
-
 }
+
+// --- ADMIN: CREATE TOUR (Upgraded for Category/Location) ---
 
 async function addNewTour() {
     const token = localStorage.getItem('token');
 
+    // Matches your TourRequestDTO
     const tourData = {
         title: document.getElementById('tour-title').value,
-        startDestination: document.getElementById('tour-start').value,
         description: document.getElementById('tour-desc').value,
-        guideUsername: document.getElementById('tour-guide').value,
         basePrice: document.getElementById('tour-price').value,
-        maxCapacity: document.getElementById('tour-capacity').value
+        maxCapacity: document.getElementById('tour-capacity').value,
+        categoryId: document.getElementById('tour-category').value, // Entity #5
+        locationId: document.getElementById('tour-location').value, // Entity #6
+        guideUsername: document.getElementById('tour-guide').value  // Entity #1
     };
 
     try {
@@ -89,18 +84,40 @@ async function addNewTour() {
         });
 
         if (response.ok) {
-            alert("Tour Package Created Successfully!");
-            window.location.href = "dashboard.html";
-        } else if (response.status === 403) {
-            alert("Access Denied: You do not have Admin permissions!");
+            alert("Tour Created with Smart Linking!");
+            window.location.href = "admin.html";
         } else {
-            alert("Failed to create tour. Check your inputs.");
+            alert("Error creating tour. Ensure Category/Location IDs exist.");
         }
     } catch (error) {
-        console.error("API Error:", error);
+        console.error(error);
     }
 }
 
+// --- TOURIST: SMART SEARCH & RECOMMENDATIONS (Entity #9) ---
+
+async function handleSmartSearch() {
+    const username = localStorage.getItem('username');
+    const query = document.getElementById('searchInput').value;
+
+    if (!query) return;
+
+    try {
+        // 1. Train the Recommendation Engine (Save Search History)
+        await fetch(`${BASE_URL}/recommendations/search?username=${username}&query=${query}`, {
+            method: 'POST'
+        });
+
+        // 2. Refresh the UI (This calls your loadRecommendations in dashboard.js)
+        if (typeof loadRecommendations === "function") {
+            loadRecommendations();
+        }
+
+        console.log("Search history updated for: " + query);
+    } catch (error) {
+        console.error("Search tracking failed", error);
+    }
+}
 
 function logout() {
     localStorage.clear();

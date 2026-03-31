@@ -1,5 +1,6 @@
 package com.example.smarttourism.controller;
 
+import com.example.smarttourism.dto.TourRequestDTO;
 import com.example.smarttourism.entity.TourPackage;
 import com.example.smarttourism.service.TourPackageService;
 import lombok.RequiredArgsConstructor;
@@ -21,12 +22,23 @@ public class TourPackageController {
     }
 
     @PostMapping
-    public ResponseEntity<TourPackage> createPackage(@RequestBody TourPackage tourPackage, @RequestParam(required = false) String guideUsername) {
-        return ResponseEntity.ok(tourPackageService.save(tourPackage));
+    public ResponseEntity<TourPackage> createPackage(@RequestBody TourRequestDTO tourRequestDTO) {
+        return ResponseEntity.ok(tourPackageService.save(tourRequestDTO));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<TourPackage> getTourById(@PathVariable Long id) {
+        return ResponseEntity.ok(tourPackageService.getTourById(id));
     }
 
     @GetMapping("/guide/{username}")
     public ResponseEntity<List<TourPackage>> getGuideTours(@PathVariable String username) {
         return ResponseEntity.ok(tourPackageService.getToursByGuide(username));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteTour(@PathVariable Long id) {
+        tourPackageService.deleteTour(id);
+        return ResponseEntity.noContent().build();
     }
 }

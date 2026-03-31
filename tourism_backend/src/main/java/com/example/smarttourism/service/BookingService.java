@@ -1,10 +1,12 @@
 package com.example.smarttourism.service;
 
+import com.example.smarttourism.dto.BookingRequestDTO;
 import com.example.smarttourism.entity.Booking;
-
 import java.util.List;
 
 public interface BookingService {
-    Booking createBooking(Long tourId, String username, Integer people);
-    List<Booking> getBookingsByGuide(String guideUsername);
+    Booking createBooking(BookingRequestDTO dto);
+    void cancelBooking(Long bookingId);
+    List<Booking> getMyBookings(String username);
+    List<Booking> getBookingsByTour(Long tourId);
 }

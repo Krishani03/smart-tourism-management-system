@@ -17,9 +17,19 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RecommendationServiceImpl implements RecommendationService {
 
-    private final TourPackageRepository tourRepository;
     private final SearchHistoryRepository searchHistoryRepository;
+    private final TourPackageRepository tourPackageRepository;
     private final UserRepository userRepository;
+
+    @Override
+    public List<TourPackage> getSuggestionsForUser(String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        return searchHistoryRepository.findFirstByUserOrderBySearchDateDesc(user)
+                .map(history -> tourPackageRepository.searchSmart(history.getSearchTerm()))
+                .orElse(getTrendingTours());
+    }
 
     @Override
     public void saveSearchHistory(String username, String searchTerm) {
@@ -35,19 +45,7 @@ public class RecommendationServiceImpl implements RecommendationService {
     }
 
     @Override
-    public List<TourPackage> getSuggestionsForUser(String username) {
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-
-        // Logic: Find the most recent search term from this user
-        return searchHistoryRepository.findFirstByUserOrderBySearchDateDesc(user)
-                .map(history -> tourRepository.searchSmart(history.getSearchTerm()))
-                .orElse(getTrendingTours()); // If no history, show trending
-    }
-
-    @Override
     public List<TourPackage> getTrendingTours() {
-        // Returns the top 5 tours based on popularity score
-        return tourRepository.findTop5ByOrderByPopularityScoreDesc();
+        return tourPackageRepository.findTop5ByOrderByPopularityScoreDesc();
     }
 }
