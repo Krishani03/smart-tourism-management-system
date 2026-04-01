@@ -33,6 +33,27 @@ body { font-family: 'Segoe UI', sans-serif; background-color: #f0f2f5; margin: 0
     font-weight: bold;
     cursor: pointer;
 }
+.btn-review {
+    background-color: #ffc107; /* Warning yellow color */
+    color: #212529;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+    margin-right: 8px;
+}
+
+.btn-review:hover {
+    background-color: #e0a800;
+}
+.tour-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    margin-top: 15px;
+}
 
 /* Passenger Table specific */
 .admin-table {
