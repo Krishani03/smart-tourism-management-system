@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Confirm Booking | Smart Tourism</title>
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <style>
+        .booking-card { max-width: 500px; margin: 60px auto; background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .info-row { display: flex; justify-content: space-between; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        input, select { width: 100%; padding: 12px; margin-top: 8px; border-radius: 10px; border: 1px solid #ddd; }
+        .btn-pay { width: 100%; background: #28a745; color: white; border: none; padding: 15px; border-radius: 10px; font-weight: bold; cursor: pointer; margin-top: 20px; font-size: 1.1rem; }
+    </style>
+</head>
+<body>
+<div class="booking-card">
+    <h2 style="color: #1e3c72;">🎟️ Complete Your Booking</h2>
+    <div id="tourDetails" class="info-row">
+        <span>Package ID:</span> <strong id="displayId">Loading...</strong>
+    </div>
+
+    <div style="margin-top: 20px;">
+        <label>Number of Travelers</label>
+        <input type="number" id="peopleCount" value="1" min="1">
+
+        <label style="margin-top: 15px; display: block;">Payment Method</label>
+        <select id="payMethod">
+            <option value="CREDIT_CARD">Credit Card</option>
+            <option value="CASH">Cash at Office</option>
+        </select>
+    </div>
+
+    <button class="btn-pay" onclick="confirmAndPay()">Confirm & Book Now</button>
+    <p style="font-size: 0.8rem; color: #777; margin-top: 15px; text-align: center;">
+        * Price may update based on real-time occupancy.
+    </p>
+</div>
+
+<script src="../js/config.js"></script>
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const tourId = urlParams.get('tourId');
+    document.getElementById('displayId').innerText = "#" + tourId;
+
+    async function confirmAndPay() {
+        const token = localStorage.getItem('token');
+        const username = localStorage.getItem('username');
+
+        // Matches your BookingRequestDTO fields
+        const bookingData = {
+            tourId: parseInt(tourId),
+            username: username,
+            numberOfPeople: parseInt(document.getElementById('peopleCount').value),
+            paymentMethod: document.getElementById('payMethod').value
+        };
+
+        try {
+            const response = await fetch(`${BASE_URL}/bookings`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(bookingData)
+            });
+
+            if (response.ok) {
+                const result = await response.json();
+                alert(`✅ Success! Total Amount: LKR ${result.totalAmount}\nBooking Status: ${result.status}`);
+                window.location.href = "dashboard.html";
+            } else {
+                alert("❌ Booking failed. Check capacity or login status.");
+            }
+        } catch (err) {
+            console.error(err);
+            alert("Server error. Is the backend running?");
+        }
+    }
+</script>
+</body>
+</html>
