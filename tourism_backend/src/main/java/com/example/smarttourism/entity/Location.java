@@ -1,5 +1,6 @@
 package com.example.smarttourism.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,5 +18,6 @@ public class Location {
     private String province;
 
     @OneToMany(mappedBy = "location")
+    @JsonIgnore
     private List<TourPackage> tourPackages;
 }
