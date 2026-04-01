@@ -10,6 +10,29 @@
     .status-cancelled { color: red; font-weight: bold; }
     table { width: 100%; border-collapse: collapse; margin-top: 10px; }
     th, td { text-align: left; padding: 12px; border-bottom: 1px solid #eee; }
+    /* Modal Overlay */
+    .modal {
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center;
+        z-index: 1000; transition: 0.3s;
+    }
+
+    /* Modal Box */
+    .modal-content {
+        background: white; padding: 30px; border-radius: 15px;
+        width: 400px; box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+
+    .hidden { display: none !important; }
+
+    /* Buttons inside Modal */
+    .modal-btns { margin-top: 20px; display: flex; gap: 10px; }
+
+    .btn-review { background: #ffc107; border: none; padding: 5px 12px; border-radius: 5px; cursor: pointer; }
+    .btn-receipt { background: #17a2b8; color: white; border: none; padding: 5px 12px; border-radius: 5px; cursor: pointer; margin-right: 5px; }
+
+    textarea { width: 100%; height: 80px; margin-top: 10px; border-radius: 8px; border: 1px solid #ddd; padding: 10px; }
+    select { width: 100%; padding: 10px; margin-top: 10px; border-radius: 8px; }
 </style>
 </head>
 <body>

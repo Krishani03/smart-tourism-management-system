@@ -54,39 +54,76 @@ async function loadSearchHistory() {
     }
 }
 
-// profile.js Add-on
 
-// 1. GENERATE RECEIPT (Uses Payment & Booking entities)
 async function generateReceipt(bookingId) {
     try {
-        // Fetch specific booking to get full details
         const response = await fetch(`${BASE_URL}/bookings/user/${username}`, {
             headers: { 'Authorization': `Bearer ${token}` }
         });
+
+        if (!response.ok) throw new Error("Fetch failed");
+
         const bookings = await response.json();
+
         const b = bookings.find(item => item.id === bookingId);
 
-        const receiptHTML = `
-            ------------------------------------
-            SMART TOURISM - OFFICIAL RECEIPT
-            ------------------------------------
-            Booking ID: ${b.id}
-            Customer: ${username}
-            Tour: ${b.tourPackage.title}
-            Travelers: ${b.numberOfPeople}
-            Total Paid: LKR ${b.totalAmount}
-            Status: ${b.status}
-            ------------------------------------
-            Thank you for exploring Sri Lanka!
+        if (!b) {
+            alert("Booking not found.");
+            return;
+        }
+
+        const receiptContent = `
+            ==========================================
+                 SMART TOURISM - OFFICIAL RECEIPT
+            ==========================================
+            DATE: ${new Date().toLocaleDateString()}
+            RECEIPT NO: RECP-${b.id}-${Math.floor(Math.random() * 1000)}
+            ------------------------------------------
+            CUSTOMER DETAILS:
+            Username: ${username}
+            
+            TOUR DETAILS:
+            Package:  ${b.tourPackage.title}
+            Location: ${b.tourPackage.location?.cityName || 'Sri Lanka'}
+            Category: ${b.tourPackage.category?.name || 'General'}
+            
+            BOOKING DETAILS:
+            No. of Travelers: ${b.numberOfPeople}
+            Booking Status:   ${b.status}
+            ------------------------------------------
+            TOTAL PAID:       LKR ${b.totalAmount.toLocaleString()}
+            ==========================================
+            Thank you for exploring Sri Lanka with us!
+            ==========================================
         `;
 
-        alert(receiptHTML); // Simplified receipt. In real app, use window.print()
+        const printWindow = window.open('', '_blank', 'width=600,height=600');
+        printWindow.document.write(`
+            <html>
+                <head>
+                    <title>Print Receipt - #${b.id}</title>
+                    <style>
+                        body { font-family: 'Courier New', Courier, monospace; padding: 40px; line-height: 1.6; }
+                        pre { white-space: pre-wrap; word-wrap: break-word; font-size: 14px; }
+                        @media print { .no-print { display: none; } }
+                    </style>
+                </head>
+                <body>
+                    <pre>${receiptContent}</pre>
+                    <button class="no-print" onclick="window.print()" style="margin-top:20px; padding:10px 20px; cursor:pointer;">
+                        🖨️ Click to Print Receipt
+                    </button>
+                </body>
+            </html>
+        `);
+        printWindow.document.close();
+
     } catch (err) {
-        alert("Could not generate receipt.");
+        console.error(err);
+        alert("Could not generate receipt. Please try again.");
     }
 }
 
-// 2. REVIEW MODAL LOGIC
 function openReviewModal(tourId, tourTitle) {
     document.getElementById('reviewTourId').value = tourId;
     document.getElementById('reviewTourTitle').innerText = "Review for: " + tourTitle;
@@ -97,7 +134,6 @@ function closeModal() {
     document.getElementById('reviewModal').classList.add('hidden');
 }
 
-// 3. SUBMIT REVIEW (Matches ReviewDTO.java)
 async function submitReview() {
     const tourId = document.getElementById('reviewTourId').value;
     const rating = document.getElementById('ratingSelect').value;
@@ -121,8 +157,8 @@ async function submitReview() {
 
     if (response.ok) {
         alert("Review Submitted! Popularity Score Updated.");
-        closeModal();
-        location.reload(); // Refresh to show popularity change
+        window.location.href = "profile.html";
+        location.reload();
     } else {
         alert("Failed to submit review.");
     }
