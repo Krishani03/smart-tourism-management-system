@@ -1,4 +1,4 @@
-// profile.js
+const BASE_URL = "http://localhost:8080/api/v1";
 const username = localStorage.getItem('username');
 const token = localStorage.getItem('token');
 
